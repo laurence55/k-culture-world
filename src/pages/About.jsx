@@ -17,7 +17,6 @@ import {
   LocationOn as LocationIcon,
   Diversity3 as TeamIcon,
   Celebration as CelebrationIcon,
-  Achievement as AchievementIcon,
 } from '@mui/icons-material';
 
 const About = () => {
@@ -54,11 +53,6 @@ const About = () => {
       icon: <CelebrationIcon />,
       title: 'Authentic Experiences',
       description: 'Carefully curated Korean cultural experiences and activities',
-    },
-    {
-      icon: <AchievementIcon />,
-      title: 'Cultural Excellence',
-      description: 'Award-winning programs and certified Korean culture experts',
     },
   ];
 
