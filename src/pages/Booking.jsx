@@ -24,6 +24,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Rating,
+  Avatar,
+  Divider,
 } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -33,6 +36,7 @@ import SignInPrompt from '../components/SignInPrompt';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import GroupIcon from '@mui/icons-material/Group';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import StarIcon from '@mui/icons-material/Star';
 
 const experiences = [
   {
@@ -49,6 +53,25 @@ const experiences = [
       'Costume rental',
       'Makeup application',
       'Digital photos included'
+    ],
+    rating: 4.8,
+    reviews: [
+      {
+        id: 1,
+        user: 'Sarah K.',
+        avatar: 'https://i.pravatar.cc/150?img=1',
+        rating: 5,
+        comment: 'Amazing experience! The stylists really know their K-pop fashion. Got to dress like my favorite idol!',
+        date: '2024-03-15'
+      },
+      {
+        id: 2,
+        user: 'Mike J.',
+        avatar: 'https://i.pravatar.cc/150?img=2',
+        rating: 4,
+        comment: 'Great photo shoot and styling. The costumes were authentic and high quality.',
+        date: '2024-03-10'
+      }
     ]
   },
   {
@@ -65,6 +88,25 @@ const experiences = [
       'Cooking demonstration',
       'Recipe sharing',
       'Beverage pairing'
+    ],
+    rating: 4.9,
+    reviews: [
+      {
+        id: 1,
+        user: 'Lisa M.',
+        avatar: 'https://i.pravatar.cc/150?img=3',
+        rating: 5,
+        comment: 'The food was incredible! Learned so much about Korean cuisine and got to try authentic street food.',
+        date: '2024-03-18'
+      },
+      {
+        id: 2,
+        user: 'David W.',
+        avatar: 'https://i.pravatar.cc/150?img=4',
+        rating: 5,
+        comment: 'Best Korean food experience outside of Korea! The cooking demo was informative and fun.',
+        date: '2024-03-12'
+      }
     ]
   },
   {
@@ -81,6 +123,25 @@ const experiences = [
       'Korean beauty products',
       'Cultural artifacts',
       'Gift wrapping service'
+    ],
+    rating: 4.7,
+    reviews: [
+      {
+        id: 1,
+        user: 'Emma R.',
+        avatar: 'https://i.pravatar.cc/150?img=5',
+        rating: 5,
+        comment: 'Found amazing K-pop merchandise and authentic Korean beauty products. Great selection!',
+        date: '2024-03-20'
+      },
+      {
+        id: 2,
+        user: 'John D.',
+        avatar: 'https://i.pravatar.cc/150?img=6',
+        rating: 4,
+        comment: 'Lots of unique items. The traditional crafts were beautiful and reasonably priced.',
+        date: '2024-03-14'
+      }
     ]
   },
   {
@@ -97,6 +158,25 @@ const experiences = [
       'High-quality sound system',
       'LED display',
       'Snacks and drinks included'
+    ],
+    rating: 4.8,
+    reviews: [
+      {
+        id: 1,
+        user: 'Amy L.',
+        avatar: 'https://i.pravatar.cc/150?img=7',
+        rating: 5,
+        comment: 'Had a blast singing K-pop songs! The sound system was amazing and the room was so cozy.',
+        date: '2024-03-17'
+      },
+      {
+        id: 2,
+        user: 'Tom B.',
+        avatar: 'https://i.pravatar.cc/150?img=8',
+        rating: 4,
+        comment: 'Great selection of K-pop songs. The snacks and drinks were a nice touch!',
+        date: '2024-03-11'
+      }
     ]
   },
   {
@@ -113,13 +193,67 @@ const experiences = [
       'Premium seating',
       'Snacks and drinks',
       'English subtitles'
+    ],
+    rating: 4.9,
+    reviews: [
+      {
+        id: 1,
+        user: 'Rachel K.',
+        avatar: 'https://i.pravatar.cc/150?img=9',
+        rating: 5,
+        comment: 'Perfect movie experience! The seats were comfortable and the subtitles were clear.',
+        date: '2024-03-19'
+      },
+      {
+        id: 2,
+        user: 'Chris P.',
+        avatar: 'https://i.pravatar.cc/150?img=10',
+        rating: 5,
+        comment: 'Amazing selection of Korean movies. The private cinema was luxurious!',
+        date: '2024-03-13'
+      }
     ]
   },
+  {
+    id: 6,
+    name: 'K-GAME ZONE',
+    price: 85,
+    duration: '2 hours',
+    maxGuests: 8,
+    description: 'Experience Korean gaming culture with popular PC games, mobile games, and esports viewing areas.',
+    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=80',
+    features: [
+      'High-end gaming PCs',
+      'Popular Korean games',
+      'Esports viewing area',
+      'Gaming tournaments',
+      'Refreshments included'
+    ],
+    rating: 4.7,
+    reviews: [
+      {
+        id: 1,
+        user: 'Alex G.',
+        avatar: 'https://i.pravatar.cc/150?img=11',
+        rating: 5,
+        comment: 'Gaming heaven! The PCs were top-notch and the esports area was incredible.',
+        date: '2024-03-16'
+      },
+      {
+        id: 2,
+        user: 'Sophie M.',
+        avatar: 'https://i.pravatar.cc/150?img=12',
+        rating: 4,
+        comment: 'Great gaming experience with friends. The refreshments were a nice bonus!',
+        date: '2024-03-10'
+      }
+    ]
+  }
 ];
 
 const Booking = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, addBooking } = useAuth();
+  const { isAuthenticated, addBooking, user } = useAuth();
   const [selectedExperience, setSelectedExperience] = useState('');
   const [date, setDate] = useState(null);
   const [guests, setGuests] = useState('');
@@ -128,6 +262,9 @@ const Booking = () => {
   const [success, setSuccess] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedExperienceDetails, setSelectedExperienceDetails] = useState(null);
+  const [newComment, setNewComment] = useState('');
+  const [commentRating, setCommentRating] = useState(5);
+  const [submittingComment, setSubmittingComment] = useState(false);
 
   const handleExperienceSelect = (experience) => {
     setSelectedExperience(experience.id);
@@ -137,6 +274,41 @@ const Booking = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setNewComment('');
+    setCommentRating(5);
+  };
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+
+    setSubmittingComment(true);
+    try {
+      const comment = {
+        id: Date.now(),
+        user: user.displayName || 'Anonymous User',
+        avatar: user.photoURL || 'https://i.pravatar.cc/150?img=13',
+        rating: commentRating,
+        comment: newComment.trim(),
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      // Update the experience with the new comment
+      const updatedExperience = {
+        ...selectedExperienceDetails,
+        reviews: [...selectedExperienceDetails.reviews, comment],
+        rating: (selectedExperienceDetails.reviews.reduce((acc, review) => acc + review.rating, 0) + commentRating) / 
+               (selectedExperienceDetails.reviews.length + 1)
+      };
+
+      setSelectedExperienceDetails(updatedExperience);
+      setNewComment('');
+      setCommentRating(5);
+    } catch (err) {
+      setError('Failed to submit comment. Please try again.');
+    } finally {
+      setSubmittingComment(false);
+    }
   };
 
   const handleDateChange = (newDate) => {
@@ -328,6 +500,18 @@ const Booking = () => {
                   >
                     {experience.description}
                   </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Rating
+                      value={experience.rating}
+                      precision={0.1}
+                      readOnly
+                      size="small"
+                      sx={{ mr: 1 }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      ({experience.rating})
+                    </Typography>
+                  </Box>
                   <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
                     <Chip
                       icon={<AccessTimeIcon />}
@@ -445,6 +629,18 @@ const Booking = () => {
                   >
                     {selectedExperienceDetails?.description}
                   </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Rating
+                      value={selectedExperienceDetails?.rating}
+                      precision={0.1}
+                      readOnly
+                      size="small"
+                      sx={{ mr: 1 }}
+                    />
+                    <Typography variant="body2" color="text.secondary">
+                      ({selectedExperienceDetails?.rating})
+                    </Typography>
+                  </Box>
                   <Typography 
                     variant="h6" 
                     gutterBottom
@@ -475,6 +671,98 @@ const Booking = () => {
                       </Grid>
                     ))}
                   </Grid>
+                  
+                  <Typography 
+                    variant="h6" 
+                    gutterBottom
+                    sx={{
+                      fontSize: { xs: '1.1rem', md: '1.25rem' },
+                      fontWeight: 600,
+                      color: 'primary.main',
+                      mt: 3,
+                    }}
+                  >
+                    Reviews
+                  </Typography>
+                  <Box sx={{ mt: 2 }}>
+                    {selectedExperienceDetails?.reviews.map((review) => (
+                      <Box key={review.id} sx={{ mb: 3 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                          <Avatar 
+                            src={review.avatar} 
+                            sx={{ width: 40, height: 40, mr: 2 }}
+                          />
+                          <Box>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                              {review.user}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              {new Date(review.date).toLocaleDateString()}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Rating
+                          value={review.rating}
+                          readOnly
+                          size="small"
+                          sx={{ mb: 1 }}
+                        />
+                        <Typography variant="body2">
+                          {review.comment}
+                        </Typography>
+                        <Divider sx={{ mt: 2 }} />
+                      </Box>
+                    ))}
+                  </Box>
+
+                  <Box sx={{ mt: 4, mb: 3 }}>
+                    <Typography 
+                      variant="h6" 
+                      gutterBottom
+                      sx={{
+                        fontSize: { xs: '1.1rem', md: '1.25rem' },
+                        fontWeight: 600,
+                        color: 'primary.main',
+                      }}
+                    >
+                      Add Your Review
+                    </Typography>
+                    <form onSubmit={handleCommentSubmit}>
+                      <Box sx={{ mb: 2 }}>
+                        <Typography component="legend">Your Rating</Typography>
+                        <Rating
+                          value={commentRating}
+                          onChange={(event, newValue) => {
+                            setCommentRating(newValue);
+                          }}
+                          size="large"
+                        />
+                      </Box>
+                      <TextField
+                        fullWidth
+                        multiline
+                        rows={4}
+                        label="Your Comment"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        sx={{ mb: 2 }}
+                      />
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        disabled={submittingComment || !newComment.trim()}
+                        sx={{
+                          bgcolor: 'primary.main',
+                          color: 'white',
+                          '&:hover': {
+                            bgcolor: 'primary.dark',
+                          },
+                        }}
+                      >
+                        {submittingComment ? 'Submitting...' : 'Submit Review'}
+                      </Button>
+                    </form>
+                  </Box>
                 </Grid>
 
                 <Grid item xs={12}>
